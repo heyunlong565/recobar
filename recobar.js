@@ -1,3 +1,11 @@
+/* var com_conf = {
+     'reco_type': 'alsobuy',
+     'pids': 1033099101,
+     'type': 12,
+     'div': 'search_tuijian_content_alsobuy',
+     'url': 'http://tuijian.dangdang.com/recobar2/',
+     'css': 'shoppingcart_tuijian.css'
+ };*/
 (function(window, $, com_conf, data){
 
     function loadJss(jss){
@@ -23,7 +31,6 @@
         var head = document.getElementsByTagName('HEAD')[0];
         var script = document.createElement('SCRIPT');
         var args = Array.prototype.slice.call(arguments, 2);
-       // console.log(args);
         script.setAttribute('type', 'text/javascript');
         script.setAttribute('src', src);
         if(typeof(callback) != 'undefined') {
@@ -60,7 +67,6 @@
         var src;
         for(var i in reco_type) {
             src = com_conf.url + "jsonp.php?type=" + com_conf.type + "&pids=" + com_conf.pids + "&reco_type=" + reco_type[i];
-            //setTimeout(function(){loadJs(src, initRender, div[i]);}, 500);
             loadJs(src, initRender, div[i], reco_type[i]);
         }
     }
@@ -108,17 +114,28 @@
             var that = this;
 
             $(this.CONF.LPAGE).bind('click', function(){
+                pagenum = that.currentpage();
                 if(--pagenum < 0) {
                     pagenum = pages-1;
                 }
                 that.pageRender(pagenum);
             });
             $(this.CONF.RPAGE).bind('click', function(){
+                pagenum = that.currentpage();
                 if(++pagenum > pages-1) {
                     pagenum = 0;
                 }
                 that.pageRender(pagenum);
             });
+        },
+        currentpage : function(){
+            var pagenum = 0;
+            $(this.CONF.PAGES).each(function(index, ele){
+                if($(ele).hasClass('now')){
+                    pagenum = index;
+                }
+            });
+            return pagenum;    
         },
         pageindex : function(){
             var that = this;
